@@ -191,6 +191,7 @@ class package:
 		covereddepend = {}
 		pkgcovered = {}
 		ret = [[],[],[]]
+		extract_required(tar_tvf)
 		filllibcache()
 		os.environ['LC_ALL'] = 'C'
 		os.path.walk(data, scanlibs, liblist)
