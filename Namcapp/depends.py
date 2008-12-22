@@ -27,13 +27,16 @@ def load(name, path=None):
 	return pkgcache[name]
 
 libcache = {'i686': {}, 'x86-64': {}}
+sandbox_directory = '/tmp/namcap.' + str(os.getpid())
 
-
-def extract_required(pkg)
-	
-	
+def extract_required(tar_tvf):
+	extract_files = []
+	for file in tar_tvf:
+		if file["rwx"][3] == "x" or re.search('(\.so?\.?)', file["name"]):
+			extract_files.append(file["name"])
     
-    subprocess.Popen("tar -C" + sandbox_directory + "-xf " + pkginfo.name + " " + file_list, shell = True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    extract_status = subprocess.Popen("tar -C" + sandbox_directory + "-xf " + pkginfo.name + " " + extract_files.split(), 
+			shell = True, stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()
       
 
 #getcovered: gets a list of dependencies from the pacman db for a package and adds them to the dict called covereddepend. This function is recursive and follows through to do the same for all dependencies listed, adding the dependencies of a dependency to that dictionary one by one.
@@ -180,7 +183,7 @@ class package:
 		return "Checks dependencies semi-smartly."
 	def prereq(self):
 		return "extract"
-	def analyze(self, pkginfo, data):
+	def analyze(self, pkginfo, data, tar_tvf):
 		liblist = [{},{}]
 		dependlist = {}
 		smartdepend = {}
